@@ -39,7 +39,7 @@ export class textileContentProvider implements vscode.TextDocumentContentProvide
 	public async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
 		let document = await vscode.workspace.openTextDocument(unpackTextileUri(uri));
 		let text = imagePath(document.getText(), unpackTextileUri(uri));
-		text = text.replace(/\#\[(.*)\]\#/gi, '.h1 $1');
+		text = text.replace(/\#\[(.*)\]\#/gi, 'h1. $1');
 		let body = await textile(text);
 
 		return `<!DOCTYPE html>
