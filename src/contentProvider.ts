@@ -2,8 +2,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
 import { imagePath } from './imagePath';
+
 
 const textile = require('textile-js');
 
@@ -15,7 +15,7 @@ export function packTextileUri(uri: vscode.Uri) {
 		return uri;
 	}
 
-	return uri.with({ scheme: textileContentProvider.textileURI.scheme, query: uri.toString()} );
+	return uri.with({ scheme: textileContentProvider.textileURI.scheme, query: uri.toString() });
 }
 
 export function unpackTextileUri(uri: vscode.Uri) {
@@ -37,10 +37,11 @@ export class textileContentProvider implements vscode.TextDocumentContentProvide
 	constructor(private context: vscode.ExtensionContext) { }
 
 	public async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
-		let document = await vscode.workspace.openTextDocument( unpackTextileUri(uri) );
-		let text = imagePath( document.getText(), unpackTextileUri(uri) );
-		let body = await textile( text );
-		
+		let document = await vscode.workspace.openTextDocument(unpackTextileUri(uri));
+		let text = imagePath(document.getText(), unpackTextileUri(uri));
+		text = text.replace(/\#\[(.*)\]\#/gi, '.h1 $1');
+		let body = await textile(text);
+
 		return `<!DOCTYPE html>
 			<html>
 			<head>
